@@ -11,6 +11,7 @@ import {
 import type { EventApi, EventRecord, RequirementFlags } from '@/services/eventApi'
 import { createMockApi } from '@/services/mockApi'
 import type { ScenarioId } from '@/services/scenarios'
+import type { LoadedDashboard } from '@/state/types'
 
 export const NOW = new Date('2026-06-01T12:00:00.000Z')
 export const FUTURE_START = '2026-06-08T18:00:00.000Z'
@@ -70,4 +71,14 @@ export function buildRecord(
 /** A mock API with no latency and a fixed clock, for deterministic tests. */
 export function createTestApi(scenario: ScenarioId = 'almost_ready'): EventApi {
   return createMockApi({ latencyMs: { min: 0, max: 0 }, now: () => NOW, scenario })
+}
+
+export function buildLoadedDashboard(overrides: Partial<LoadedDashboard> = {}): LoadedDashboard {
+  return {
+    status: 'loaded',
+    event: buildPublishedEvent('scheduled'),
+    requirements: buildRequirements(),
+    transition: { status: 'idle' },
+    ...overrides,
+  }
 }

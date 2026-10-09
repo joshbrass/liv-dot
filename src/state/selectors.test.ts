@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { NOW, buildPublishedEvent, buildRequirements } from '@/test/fixtures'
+import {
+  FUTURE_START,
+  NOW,
+  buildDraftEvent,
+  buildLoadedDashboard,
+  buildPublishedEvent,
+  buildRequirements,
+} from '@/test/fixtures'
 import { initialDashboardState } from './eventReducer'
 import {
   selectAvailableActions,
@@ -12,13 +19,7 @@ import {
 import type { LoadedDashboard } from './types'
 
 function buildLoaded(overrides: Partial<LoadedDashboard> = {}): LoadedDashboard {
-  return {
-    status: 'loaded',
-    event: buildPublishedEvent('scheduled'),
-    requirements: buildRequirements({ crew: false }),
-    transition: { status: 'idle' },
-    ...overrides,
-  }
+  return buildLoadedDashboard({ requirements: buildRequirements({ crew: false }), ...overrides })
 }
 
 describe('selectors', () => {
@@ -43,6 +44,13 @@ describe('selectors', () => {
       'wrong_status',
       'requirement_unmet',
     ])
+  })
+
+  it('evaluates scheduling against the start time the host is entering', () => {
+    const data = buildLoaded({ event: buildDraftEvent({ startsAt: null }) })
+
+    expect(selectAvailableActions(data, NOW)[0]?.evaluation.allowed).toBe(false)
+    expect(selectAvailableActions(data, NOW, FUTURE_START)[0]?.evaluation.allowed).toBe(true)
   })
 
   it('locks requirements once the event is live', () => {

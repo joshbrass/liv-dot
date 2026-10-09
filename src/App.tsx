@@ -1,11 +1,16 @@
+import { EventDashboard } from '@/components/EventDashboard'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { createMockApi } from '@/services/mockApi'
+import { EventProvider } from '@/state/EventProvider'
+
+const api = createMockApi()
 
 export function App() {
   return (
     <TooltipProvider>
-      <main className="mx-auto max-w-5xl p-6">
-        <h1 className="text-2xl font-semibold">LIV DOT · Host Event Dashboard</h1>
-      </main>
+      <EventProvider api={api}>
+        <EventDashboard />
+      </EventProvider>
     </TooltipProvider>
   )
 }

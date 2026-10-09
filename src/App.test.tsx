@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest'
 import { App } from '@/App'
 
 describe('App', () => {
-  it('renders the dashboard heading', () => {
+  it('renders the dashboard shell with its breadcrumb', () => {
     render(<App />)
-    expect(screen.getByRole('heading', { name: /host event dashboard/i })).toBeInTheDocument()
+    expect(screen.getByRole('navigation', { name: 'Breadcrumb' })).toHaveTextContent('Events')
   })
 })

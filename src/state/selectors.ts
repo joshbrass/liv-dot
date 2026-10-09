@@ -24,11 +24,21 @@ export function selectSnapshot({ event, requirements }: LoadedDashboard): EventS
   return { event, requirements }
 }
 
+/**
+ * Host actions for the current status. For a draft, `draftStartsAt` is the start time the
+ * host is entering, so the schedule action is evaluated against what they are about to submit.
+ */
 export function selectAvailableActions(
   data: LoadedDashboard,
   now: Date = new Date(),
+  draftStartsAt?: string | null,
 ): AvailableAction[] {
-  return getAvailableActions(selectSnapshot(data), now)
+  const snapshot = selectSnapshot(data)
+  const event =
+    snapshot.event.status === 'draft' && draftStartsAt !== undefined
+      ? { ...snapshot.event, startsAt: draftStartsAt }
+      : snapshot.event
+  return getAvailableActions({ ...snapshot, event }, now)
 }
 
 export function selectReadinessSummary(data: LoadedDashboard): ReadinessSummary {
