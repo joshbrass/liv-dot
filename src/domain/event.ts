@@ -43,3 +43,11 @@ export interface PublishedEvent extends EventDetails {
 }
 
 export type Event = DraftEvent | PublishedEvent
+
+/** Moves an event into a published status. Published events always carry a start time. */
+export function toPublishedEvent(event: Event, status: PublishedStatus): PublishedEvent {
+  if (event.startsAt === null) {
+    throw new Error('An event needs a start time before it can be published.')
+  }
+  return { ...event, status, startsAt: event.startsAt }
+}

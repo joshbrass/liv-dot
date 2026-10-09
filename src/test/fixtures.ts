@@ -8,6 +8,9 @@ import {
   type RequirementId,
   type Requirements,
 } from '@/domain'
+import type { EventApi, EventRecord, RequirementFlags } from '@/services/eventApi'
+import { createMockApi } from '@/services/mockApi'
+import type { ScenarioId } from '@/services/scenarios'
 
 export const NOW = new Date('2026-06-01T12:00:00.000Z')
 export const FUTURE_START = '2026-06-08T18:00:00.000Z'
@@ -55,4 +58,16 @@ export function buildSnapshot(
   requirements: Requirements = buildRequirements(),
 ): EventSnapshot {
   return { event, requirements }
+}
+
+export function buildRecord(
+  event: EventRecord['event'],
+  requirements: Partial<RequirementFlags> = {},
+): EventRecord {
+  return { event, requirements: { ...ALL_MET, ...requirements } }
+}
+
+/** A mock API with no latency and a fixed clock, for deterministic tests. */
+export function createTestApi(scenario: ScenarioId = 'almost_ready'): EventApi {
+  return createMockApi({ latencyMs: { min: 0, max: 0 }, now: () => NOW, scenario })
 }

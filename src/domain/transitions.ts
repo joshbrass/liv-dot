@@ -1,4 +1,4 @@
-import { STATUS_LABELS, type EventStatus } from './event'
+import { STATUS_LABELS, type EventStatus, type PublishedStatus } from './event'
 import { toEvaluation, type BlockReason, type Evaluation } from './evaluation'
 import {
   requireAllRequirementsMet,
@@ -15,7 +15,8 @@ export type TransitionId = HostActionId | SystemTransitionId
 
 export interface TransitionDefinition {
   from: EventStatus
-  to: EventStatus
+  /** No transition ever returns an event to Draft. */
+  to: PublishedStatus
   /** `host` transitions are triggered by the host; `system` ones are applied automatically. */
   trigger: 'host' | 'system'
   guards: readonly Guard[]

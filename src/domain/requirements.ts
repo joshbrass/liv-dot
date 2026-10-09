@@ -5,6 +5,8 @@ export type RequirementId = 'crew' | 'ingest' | 'pricing'
 export const REQUIREMENT_IDS: readonly RequirementId[] = ['crew', 'ingest', 'pricing']
 
 interface RequirementDefinition {
+  /** Short noun used in notices and buttons, e.g. "Production crew". */
+  name: string
   label: string
   description: string
   unmetMessage: string
@@ -12,16 +14,19 @@ interface RequirementDefinition {
 
 export const REQUIREMENT_DEFINITIONS: Record<RequirementId, RequirementDefinition> = {
   crew: {
+    name: 'Production crew',
     label: 'Production crew assigned',
     description: 'A production crew is assigned to run the broadcast.',
     unmetMessage: 'Production crew is not assigned.',
   },
   ingest: {
+    name: 'Streaming ingest',
     label: 'Streaming ingest configured',
     description: 'An ingest endpoint and stream key are configured for the broadcast.',
     unmetMessage: 'Streaming ingest is not configured.',
   },
   pricing: {
+    name: 'Ticket pricing',
     label: 'Ticket pricing configured',
     description: 'Ticket tiers and prices are set so attendees can buy access.',
     unmetMessage: 'Ticket pricing is not configured.',
